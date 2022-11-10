@@ -1,6 +1,10 @@
 //Permite definir los estados (variables) del componente
 import { paste } from '@testing-library/user-event/dist/paste';
 import { useState } from 'react';
+
+function formatNumber(number){
+    return new Intl.NumberFormat().format(number)
+}
 export default function Ventas() {
 
     //Definir los estados de este componente
@@ -16,7 +20,9 @@ export default function Ventas() {
     const handleSubmit = (event) => {
         event.preventDefault(); //No hace postback (va al servidor y cuando regrese del servicdor borra la información en el formulario)
         //validar que todos los datos se hayan diligenciado
+       
         if (ident != "" && lastname != "" && zone != "" && name != "" && saledate != "" && salevalue != "") {
+            
             if (salevalue >= 1000000 && salevalue <= 100000000) {
                 let com;
                 if (zone == "north") {
@@ -28,7 +34,7 @@ export default function Ventas() {
                 else {
                     com = (parseFloat(salevalue) * 0.03)
                 }
-                setCommissionvalue(com)
+                setCommissionvalue(formatNumber(com))
 
                 let bon;
                 if (salevalue >= 80000000) {
@@ -37,7 +43,7 @@ export default function Ventas() {
                 else {
                     bon = 0
                 }
-                setBonus(bon)
+                setBonus(formatNumber(bon))
             }
             else {
                 alert("Ingrese un valor que se encuentre entre $1.000.000 y $100.000.000")
@@ -61,6 +67,12 @@ export default function Ventas() {
         setBonus("");
     }
 
+    
+
+    // newTdSalevalue.appendChild(salevalue);
+    // newTdCommisionvalue.appendChild(commissionvalue);
+    // newTdBonus.appendChild(bonus);
+
     return (
         <div className="container">
             <center><h2> Sistema de Ventas</h2></center>
@@ -69,7 +81,7 @@ export default function Ventas() {
                     <div className="col">
                         <label htmlFor="Ident">Identificación</label>
                         <input
-                            type="text"
+                            type="number"
                             placeholder="Identificacion"
                             id="ident"
                             name="ident"
@@ -142,6 +154,7 @@ export default function Ventas() {
                             className='form-control'
                             onChange={e => setSalevalue(e.target.value)}
                             value={salevalue}
+                        
                         />
                     </div>
                 </div>
